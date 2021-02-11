@@ -19,13 +19,13 @@ If you have some truly serious, multi-hour computation project (and that's what 
 
 To submit a batch job, we usually create a separate file called a *PBS script*. This file asks the scheduler for specific resources, and then specifies the actions that will be done once we get on a compute node. 
 
-Let us go through an example. We will use bath mode to compute the first eigenvalue of a large matrix. We will create two scripts: a Matlab script which does the computation, and a PBS script which will execute the Matlab script on a compute node in batch mode.
+Let us go through an example. We will use batch mode to create a small random matrix with normally-distributed values. We will create two scripts: an R script which does the computation, and a PBS script which will execute the R script on a compute node in batch mode.
 
-Palmetto has a simple text editor which is called `nano`. It doesn't offer any fancy formatting, but it suffices for ceating and editing simple texts. Let's go to our home directory and create the Matlab script:
+Palmetto has a simple text editor which is called `nano`. It doesn't offer any fancy formatting, but it suffices for ceating and editing simple texts. Let's go to our home directory and create the R script:
 
 ~~~
 cd
-nano bigmatrix.m
+nano randmatrix.r
 ~~~
 {: .bash}
 
@@ -35,9 +35,8 @@ This will open the `nano` text editor:
 
 Inside the editor, type this:
 ~~~
-a = randn (5000, 5000);
-[v,d] = eig (a); 
-fprintf ('first eigenvalue = %.5f\n', d(1,1));
+M <- matrix(rnorm(16), nrow=4)
+M
 ~~~
 Instead of typing, you can copy the text from the Web browser and paste it into `nano`. Windows users can paste with `Shift`+`Ins` (or by right-clicking the mouse). Mac users can paste with `Cmd`+`V`. At the end, your screen should look like this:
 
@@ -46,14 +45,14 @@ Instead of typing, you can copy the text from the Web browser and paste it into 
 To save it, press `Ctrl`+`O`, and hit enter. To exit the editor, press `Ctrl`+`X`. To make sure the text is saved properly, print it on screen using the `cat` command:
 
 ~~~
-cat bigmatrix.m
+cat randmatrix.r
 ~~~
 {: .bash}
 
 Now, let's create the PBS script:
 
 ~~~
-nano bigmatrix.sh
+nano randmatrix.sh
 ~~~
 {: .bash}
 
@@ -62,37 +61,39 @@ Inside the `nano` text editor, type this (or paste from the Web browser):
 ~~~
 #!/bin/bash
 #
-#PBS -N bigmatrix
+#PBS -N random_matrix
 #PBS -l select=1:ncpus=10:mem=10gb:interconnect=1g
-#PBS -l walltime=0:30:00
-#PBS -o output.txt
+#PBS -l walltime=0:20:00
+#PBS -q skystd
+#PBS -o random_matrix.txt
 #PBS -j oe
 
-cd $HOME
-module load matlab/2020a
-matlab -r "bigmatrix"
+cd $PBS_O_WORKDIR
+module load r/4.0.2-gcc/8.3.1
+Rscript randmatrix.r
 ~~~
 
 Let's go through the script, line by line. The first cryptic line says that it's a script that is executed by the Linux shell. The next line is empty, followed by five lines that are the instructions to the scheduler (they start with `#PBS`):
 
-- `-N` specifiies the name of the job (could be anything, I called it `bigmatrix` for the sake of consistency)
-- the first `-l` line is the specification of resources: one node, ten CPUs, ten Gb of RAM, 1g interconnect
-- the second `-l` line is the amount of walltime (thirty minutes);
+- `-N` specifiies the name of the job;
+- the first `-l` line is the specification of resources: one node, ten CPUs, ten Gb of RAM, 1g interconnect;
+- the second `-l` line is the amount of walltime (twenty minutes);
+- `-q` specifies the name of the queue;
 - `-o` specifies the name of the output file where the Matlab output will be printed;
-- `-j oe` means "join output and error", which is, if any errors happen, they will be written into `output.txt`.
+- `-j oe` means "join output and error", which is, if any errors happen, they will be written into `random_matrix.txt`.
 
-The rest is the instructions what to do once we get on the compute node that satisfies the request we provided in `-l`: go to the home directory, load the Matlab module, and execute the Matlab script called bigmatrix.m that we have created. Save the PBS script and exit `nano` (`Ctrl`+`O`, `ENTER`, `Ctrl`+`X`). 
+The rest is the instructions what to do once we get on the compute node that satisfies the request we provided in `-l`: go to the directory from which you have submitted `qsub`, load the R module, and execute the R script called randmatrix.r that we have created. Save the PBS script and exit `nano` (`Ctrl`+`O`, `ENTER`, `Ctrl`+`X`). 
 
-A very common question is how much walltime we should ask for. It's a tricky question beause there is no way of knowing how much time you will need until you actually try it. My rule of thumb is: make a rough guess, and ask for twice as much. The `bigmatrix.m` script takes at most 15 minutes (usually it runs under five minutes), so I ask for half an hour.
+A very common question is how much walltime we should ask for. It's a tricky question beause there is no way of knowing how much time you will need until you actually try it. My rule of thumb is: make a rough guess, and ask for twice as much. 
 
 Now, let's submit our batch job!
 
 ~~~
-qsub bigmatrix.sh
+qsub randmatrix.sh
 ~~~
 {: .bash}
 
-We use the same command `qsub` that we have previously used for an interactive job, but now it's much simpler, because all the hard work went into creating the PBS shell script `bigmatrix.sh` and `qsub` reads all the necessary information from there. If the submission was successful, it will give you the job ID, for example:
+We use the same command `qsub` that we have previously used for an interactive job, but now it's much simpler, because all the hard work went into creating the PBS shell script `randmatrix.sh` and `qsub` reads all the necessary information from there. If the submission was successful, it will give you the job ID, for example:
 
 ~~~
 632585.pbs02
@@ -113,38 +114,31 @@ pbs02:
                                                             Req'd  Req'd   Elap
 Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
 --------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
-632585.pbs02    gyourga  c1_sing* bigmatrix  24385*   1  10   10gb 00:30 R 00:00
+632585.pbs02    gyourga  skystd* random_matrix  24385*   1  10   10gb 00:20 R 00:00
 ~~~
 {: .output}
 
-You see the job ID, your Palmetto username, the name of the queue (more on that later), the name of the job (`bigmatrix`), the resources requested (1 node, 10 CPUs, 10 gb of RAM, half an hour of walltime). The letter `R` means that the job is running (`Q` means "queued", and `F` means "finished"), and then it shows for how long it's been running (it basically just started).
+You see the job ID, your Palmetto username, the name of the queue (more on that later), the name of the job (`random_matrix`), the resources requested (1 node, 10 CPUs, 10 gb of RAM, twnety minutes of walltime). The letter `R` means that the job is running (`Q` means "queued", and `F` means "finished"), and then it shows for how long it's been running (it basically just started).
 
 Wait a little bit and do `qstat` again (you can hit the `UP` arrow to show the previous command). `Elap time` should now be a bit longer. The script should take five minutes or so to execute. If you enter `qstat -u <your Palmetto username>` and the list is empty, then congratulations, we are done!
 
-If everything went well, you should now see the file `output.txt`. Let's print it on screen:
+If everything went well, you should now see the file `random_matrix.txt`. Let's print it on screen:
 
 ~~~
-cat output.txt
+cat random_matrix.txt
 ~~~
 {: .bash}
 
 ~~~
-MATLAB is selecting SOFTWARE OPENGL rendering.
-
-                            < M A T L A B (R) >
-                  Copyright 1984-2020 The MathWorks, Inc.
-              R2020a Update 1 (9.8.0.1359463) 64-bit (glnxa64)
-                               April 9, 2020
-
-
-To get started, type doc.
-For product information, visit www.mathworks.com.
-
->> >> >> first eigenvalue = -64.79945
+            [,1]        [,2]        [,3]      [,4]
+[1,]  0.33798012 -0.12144303  0.28047223 0.3158535
+[2,] -0.20359725  1.24607176 -0.04659389 0.6236961
+[3,]  1.21438131 -0.33665263 -1.34250195 0.1748334
+[4,] -0.01764249 -0.07867804 -0.74425883 0.7559597
 ~~~
 {: .output}
 
-Your first eigenvalue might be different because it's a random matrix.
+Your matrix might be different because it's a random matrix.
 
 Another way to use `qstat` is to list the information about a particular job. Here, instead of `-u`, we use the `-xf` option, followed by the Job ID:
 
