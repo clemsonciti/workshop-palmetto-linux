@@ -40,7 +40,7 @@ M
 ~~~
 Instead of typing, you can copy the text from the Web browser and paste it into `nano`. Windows users can paste with `Shift`+`Ins` (or by right-clicking the mouse). Mac users can paste with `Cmd`+`V`. At the end, your screen should look like this:
 
-<img src="../fig/nano_matlab.png" style="height:350px">
+<img src="../fig/nano_r.png" style="height:350px">
 
 To save it, press `Ctrl`+`O`, and hit enter. To exit the editor, press `Ctrl`+`X`. To make sure the text is saved properly, print it on screen using the `cat` command:
 
