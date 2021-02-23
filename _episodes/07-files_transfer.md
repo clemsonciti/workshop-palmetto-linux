@@ -17,7 +17,7 @@ There are many ways to transfer files between your local computer and Palmetto. 
 
 After installation, click on "Open Connection". A new window will pop out:
 
-<img src="../fig/cyberduck_config.png" style="height:200px">
+<img src="../fig/cyberduck_config.png">
 
 Let's configure the connection:
 - in the drop-down menu on top, select "SFTP" instead of the default "FTP";
@@ -27,7 +27,7 @@ Let's configure the connection:
 
 Then, click on "Connect". Another window will pop out asking you to do two-factor verification:
 
-<img src="../fig/cyberduck_2fa.png" style="height:200px">
+<img src="../fig/cyberduck_2fa.png">
 
 Type "1" (the number one) or the word "push" if you want to get a DUO push notification. After two-factor verification, a yet another new window will pop up, which will contain the contents of your Palmetto home directory (if this is your first time using Palmetto, it will be empty). You can go to any other folder on Palmetto by changing the path (e.g., `/scratch1/username`). You can upload files by clicking the "Upload" button, and download files by right-clicking them and selecting "Download".
 
