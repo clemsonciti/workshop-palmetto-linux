@@ -199,4 +199,3 @@ bigmem                1         80          5      168:00:00
 ~~~
 {: .output}
 
-One thing to note is that 1g nodes have maximum walltime of 168 hours (seven days), and InfiniBand (hdr and fdr) nodes have maximum walltime of 72 hours (three days). Since the GPUs are only installed on the InfiniBand nodes, any job that asks for a GPU will also be subject to 72-hour limit. The maximum number of simultaneous jobs really depends on how much CPUs and memory you are asking; for example, for 1 node, 10 CPUs and 10 Gb of RAM (what we asked for in our `bigmatrix` job), we can run 300 jobs on 1g nodes (queue name `c1_single`), but only 15 jobs on InfiniBand nodes (queue name `c2_single`). 
