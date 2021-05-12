@@ -37,9 +37,7 @@ pwd
 ~~~
 {: .output}
 
-100 Gb might be enough for some, but for people dealing with extensive amounts of data that would not be enough. We also offer the access to *scratch space*, which is about 2++ Petabytes in total. Scratch space is not backed up; files that haven't been used for more than a month are automatically deleted (and cannot be restored). We strongly encourage people to use scratch space, but please be aware of its temporary nature. When you get anything that is worth keeping, please back it up, either in your home directory, or on your local machine.
-
-Scratch space is divided into two directories: `scratch1` (1.88 Petabytes) and `scratch2` (188 Terabytes). `scratch1` uses a faster system for more rapid file transfer, and is well suited for jobs with thousands of read/write requests. `scratch2` is better suited for read/write jobs that are performed in parallel.
+100 Gb might be enough for some, but for people dealing with extensive amounts of data that would not be enough. We also offer the access to *scratch space*, which is about 2+ Petabytes in total. Scratch space is not backed up; files that haven't been used for more than a month are automatically deleted (and cannot be restored). We strongly encourage people to use scratch space, but please be aware of its temporary nature. When you get anything that is worth keeping, please back it up, either in your home directory, or on your local machine.
 
 To go to a scratch directory, or to any directory on Palmetto, use the `cd` ("change directory") command:
 
@@ -48,14 +46,6 @@ cd /scratch1/<your Palmetto username>
 ~~~
 {: .bash}
  
-
-or:
-
-~~~
-cd /scratch2/<your Palmetto username>
-~~~
-{: .bash}
-
 To go to your home directory, you can do
 
 ~~~
@@ -70,6 +60,6 @@ cd
 ~~~
 {: .bash}
 
-Here, I will not go into details about Linux commands. Some of you have taken our Linux workshop. There are many online tutorials, my favourite is [this one.](http://linuxcommand.org/lc3_learning_the_shell.php) Please spend some time getting familiar with going between the directories, as well as with copying, moving, and deleting files.
+NOTE: please don't use `/tmp` for temporary storage! Use `/scratch1` or `$TMPDIR`.
 
-We offer storage space on Palmetto for sale, with the price of $150 per 1 terabyte. This storage is backed up just like your home directory.
+NOTE to people who have used Skylight before it migrated to Palmetto: your old storage is available in `/skylight` folder, under your old Skylight username (not your new Palmetto username). **This storage is not backed up**, and it has **no warranty**, so it would be great if you backed up the important files to your home directory or elsewhere.
