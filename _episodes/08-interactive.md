@@ -144,14 +144,16 @@ exit
 
 This will bring you back to the login node. See how your prompt has changed to `login001`. It is important to notice that you have to be on a login node to request a compute node. One you are on the compute node, and you want to go to another compute node, you have to exit first.
 
-For some jobs, you might want to get a GPU, or perhaps two GPUs. For such requests, the `qsub` command needs to specify the number of GPUs (one or two) and the type of GPUs (which you can get from `cat /etc/hardware-table`); we will also have to use the `skygpu` queue. For example, let's request a NVIDIA Tesla P100: 
+For some jobs, you might want to get a GPU, or perhaps two GPUs. For such requests, the `qsub` command needs to specify the number of GPUs and the type of GPUs (which you can get from `cat /etc/hardware-skylight`); we will also have to use the `skygpu` queue. For example, let's request a NVIDIA Tesla GTX-1080: 
 
 ~~~
-qsub -I -q skygpu -l select=1:ncpus=4:mem=10gb:ngpus=1:gpu_model=p100,walltime=2:00:00
+qsub -I -q skygpu -l select=1:ncpus=4:mem=10gb:ngpus=1:gpu_model=gtx1080,walltime=2:00:00
 ~~~
 {: .bash}
 
-You might have to wait for a bit of the P100 nodes are busy. Once you get on the compute node, exit it to let other people a chance to get on it.
+You might have to wait for a bit of the GTX-1080 nodes are busy. Once you get on the compute node, exit it to let other people a chance to get on it.
+
+If you want a GPU but don't care about the type of the GPU, you can request `gpu_model=any`. 
 
 It is possible to ask for several compute nodes at a time, for example `select=4` will give you 4 compute nodes. Some programs, such as LAMMPS or NAMD, work a lot faster if you ask for several nodes. This is an advanced topic and we will not discuss it here, but you can find some examples on our website.
 
