@@ -46,7 +46,7 @@ exit
 
 Now, you will see the prompt changing back to `login001`. 
 
-The `qsub` command that we have entered used the default parameters: one CPU, 2 Gb of RAM, and 25 minutes of walltime (walltime is the amount of time you are requestng for the compute node; once this time is over, you are kicked out from the compute node). This request is very modest and not particularly practical. Let's do a mpre relevant request: four CPUs, 10 Gb of RAM, and two hours of walltime:
+The `qsub` command that we have entered used the default parameters: one CPU, 2 Gb of RAM, and 24 hours of walltime (walltime is the amount of time you are requestng for the compute node; once this time is over, you are kicked out from the compute node). This request is very modest and not particularly practical. Let's do a more relevant request: four CPUs, 10 Gb of RAM, and two hours of walltime:
 
 ~~~
 qsub -I -q skystd -l select=1:ncpus=4:mem=10gb,walltime=2:00:00
@@ -66,7 +66,7 @@ Now, let's carefully go through the request:
 - `mem=10gb` means that we are asking for 10 Gb of RAM (you shouldn't ask for less than 8 Gb); again, memory is specific to the user, and not shared between different users who use the same node);
 - finally, `walltime=2:00:00` means that we are asking to use the node for 2 hours; after two hours we will be logged off the compute node if we haven't already disconnected.
 
-This is actually a quite modest request as well, and the scheduler should grant it right away. Sometimes, when we are asking for much substantial amount of resources (for example, 10 nodes with 20 cores and 370 Gb of RAM), the scheduler cannot satisfy our request, and will put us into the queue so we will have to wait until the node becomes available. 
+This is actually a quite modest request as well, and the scheduler should grant it right away. Sometimes, when we are asking for much substantial amount of resources (for example, 10 nodes with 20 cores and 370 Gb of RAM), the scheduler cannot satisfy our request, and will put us into the queue so we will have to wait until the node becomes available. If you don't want to wait, you can press Ctrl+C.
 
 Once the request is granted, you will see something like that:
 
@@ -154,6 +154,8 @@ qsub -I -q skygpu -l select=1:ncpus=4:mem=10gb:ngpus=1:gpu_model=p100,walltime=2
 You might have to wait for a bit of the P100 nodes are busy. Once you get on the compute node, exit it to let other people a chance to get on it.
 
 It is possible to ask for several compute nodes at a time, for example `select=4` will give you 4 compute nodes. Some programs, such as LAMMPS or NAMD, work a lot faster if you ask for several nodes. This is an advanced topic and we will not discuss it here, but you can find some examples on our website.
+
+NOTE: please be considerate of others when you issue qsub. Remember that Palmetto is a shared resource. For example, maximum walltime is 10 days, but please don't ask for 10 days of walltime if you only plan to run your program for two hours. The same goes for CPUs and memory: if you have a small program, don't ask for 500 Gb of RAM.  
 
 It is very important to remember that you shouldn't run computations on the login node, because the login node is shared between everyone who logs into Palmetto, so your computations will interfere with other people's login processes. However, once you are on a compute node, you can run some computations, because each user gets their own CPUs and RAM so there is no interference. If you are on the compute node, exit it. Once you get on the login node, type this:
 
