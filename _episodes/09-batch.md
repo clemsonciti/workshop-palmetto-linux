@@ -161,41 +161,33 @@ checkqueuecfg
 You will see something like this:
 ~~~
 1G QUEUES     min_cores_per_job  max_cores_per_job   max_mem_per_queue  max_jobs_per_queue   max_walltime
-c1_solo                       1                  1              5000gb                 500      168:00:00
-c1_single                     2                 24             36000gb                 300      168:00:00
-c1_tiny                      25                128             25600gb                  25      168:00:00
-c1_small                    129                512              8192gb                   2      168:00:00
-c1_medium                   513               2048             32768gb                   2      168:00:00
-c1_large                   2049               4096                 0gb                   0      168:00:00
+c1_solo                       1                  1             10000gb                1000      336:00:00
+c1_single                     2                 24             30000gb                 250      336:00:00
+c1_tiny                      25                128             51200gb                  50      336:00:00
+c1_small                    129                512              8192gb                   2      336:00:00
+c1_medium                   513               2048             16384gb                   1      336:00:00
+c1_large                   2049               4096             32768gb                   1      336:00:00
 
 IB QUEUES     min_cores_per_job  max_cores_per_job   max_mem_per_queue  max_jobs_per_queue   max_walltime
-c2_single                     1                 40              6000gb                  15       72:00:00
+c2_single                     1                 40              4000gb                  10       72:00:00
 c2_tiny                      41                200             16000gb                   5       72:00:00
-c2_small                    201                512              6144gb                   1       72:00:00
+c2_small                    201                512             12288gb                   2       72:00:00
 c2_medium                   513               2048             16384gb                   1       72:00:00
 c2_large                   2049               4096                 0gb                   0       72:00:00
 
 GPU QUEUES     min_gpus_per_job   max_gpus_per_job  min_cores_per_job  max_cores_per_job   max_mem_per_queue  max_jobs_per_queue   max_walltime
-gpu_small                     1                  4                  1                 96              4320gb                  15       72:00:00
-gpu_medium                    5                 16                  1                256              6144gb                   4       72:00:00
-gpu_large                    17                256                  1               2048             12288gb                   2       72:00:00
-
-VGPU QUEUES   min_vgpus_per_job  max_vgpus_per_job  min_cores_per_job  max_cores_per_job   max_mem_per_queue  max_jobs_per_queue   max_walltime
-vgpu_small                    1                  1                  1                  4               320gb                  10       72:00:00
+gpu_small                     1                  4                  1                 96              2880gb                  10       72:00:00
+gpu_medium                    5                 16                  1                256              4608gb                   3       72:00:00
+gpu_large                    17                256                  1               2048              6144gb                   1       72:00:00
 
 SMP QUEUE     min_cores  max_cores   max_jobs   max_walltime
 bigmem                1         80          5      168:00:00
 
-
-   'max_mem' is the maximum amount of memory all your jobs in this queue can
-   consume at any one time.  For example, if the max_mem for the solo queue
-   is 4000gb, and your solo jobs each need 10gb, then you can run a
-   maximum number of 4000/10 = 400 jobs in the solo queue, even though the
-   current max_jobs setting for the solo queue may be set higher than 400.
-
-
-   NOTE:  Although you may be within the limits for a queue, there may not
-          be any resources of the type you are requesting currently available.
+SKYLIGHT QUEUES   max_jobs   max_walltime
+skystd_e             10      240:00:00
+skylm_e               3      240:00:00
+skygpu_e              5      240:00:00
 ~~~
 {: .output}
 
+The relevant information is the thre skylight queues at the bottom. Maximum walltime for Skylight users is 240 hours (10 days). Maximum number of jobs that can be executed in parallel is 10 for skystd, 3 for slylm, and 5 for skygpu. These numbers can be changed in future, so make sure you run `checkqueuecfg` once in a while to see if the limits have changed.
