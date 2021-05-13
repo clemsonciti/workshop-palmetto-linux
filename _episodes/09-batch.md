@@ -190,4 +190,4 @@ skygpu_e              5      240:00:00
 ~~~
 {: .output}
 
-The relevant information is the thre skylight queues at the bottom. Maximum walltime for Skylight users is 240 hours (10 days). Maximum number of jobs that can be executed in parallel is 10 for skystd, 3 for slylm, and 5 for skygpu. These numbers can be changed in future, so make sure you run `checkqueuecfg` once in a while to see if the limits have changed.
+The relevant information is the thre skylight queues at the bottom. Maximum walltime for Skylight users is 240 hours (10 days). Maximum number of jobs that can be executed in parallel is 10 for skystd, 3 for skylm, and 5 for skygpu. These numbers can be changed in future, so make sure you run `checkqueuecfg` once in a while to see if the limits have changed.
