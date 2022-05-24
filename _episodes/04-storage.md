@@ -61,5 +61,3 @@ cd
 {: .bash}
 
 NOTE: please don't use `/tmp` for temporary storage! Use `/scratch1` or `$TMPDIR`.
-
-NOTE to people who have used Skylight before it migrated to Palmetto: your old storage is available in `/skylight` folder, under your old Skylight username (not your new Palmetto username). **This storage is not backed up**, and it has **no warranty**, so it would be great if you backed up the important files to your home directory or elsewhere.
