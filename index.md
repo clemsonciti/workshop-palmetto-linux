@@ -12,7 +12,7 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
 {: .prereq}
 
 > ## Workshop Description
-> This workshop introduces participants to the Palmetto Cluster, Clemson University’s largest high-performance computing resource, its structure and basic usage and how to submit computational tasks to the cluster. It was specifically created for the Skylight / Mercury users. A short introduction to Linux is also included.
+> This workshop introduces participants to the Palmetto Cluster, Clemson University’s largest high-performance computing resource, its structure and basic usage and how to submit computational tasks to the cluster. It was specifically created for the Skylight / Mercury users. 
 >
 {: .prereq}
 
